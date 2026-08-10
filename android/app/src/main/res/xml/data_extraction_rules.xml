@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Backup / transfer policy.
+
+  android:allowBackup="false" already disables Google Auto Backup on API 30 and
+  below. From API 31 onward these rules govern the two extraction paths
+  separately, and BOTH are closed here:
+
+    cloud-backup     app data is not restored from a Google backup.
+    device-transfer  nor via the phone-to-phone setup wizard, which
+                     allowBackup="false" does not cover.
+
+  App data therefore stays on the handset it was created on.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+        <exclude domain="file" />
+        <exclude domain="database" />
+        <exclude domain="sharedpref" />
+        <exclude domain="external" />
+    </device-transfer>
+</data-extraction-rules>
