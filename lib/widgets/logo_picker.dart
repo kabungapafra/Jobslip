@@ -15,7 +15,7 @@ class LogoPicker extends StatelessWidget {
   final ValueChanged<String?> onChanged;
   final double size;
 
-  const LogoPicker({super.key, required this.logoPath, required this.onChanged, this.size = 56});
+  const LogoPicker({super.key, required this.logoPath, required this.onChanged, this.size = 64});
 
   Future<void> _pick() async {
     final picked = await ImagePicker().pickImage(source: ImageSource.gallery, maxWidth: 800);
@@ -41,20 +41,26 @@ class LogoPicker extends StatelessWidget {
         alignment: Alignment.center,
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
-          // No fill behind an actual logo — many logos are transparent-bg
-          // PNGs and a colored tile behind them looks like a rendering
-          // bug. The placeholder state still needs a visible box.
-          color: hasLogo ? null : AppTheme.chipBackground,
-          borderRadius: BorderRadius.circular(10),
-          border: hasLogo ? null : Border.all(color: AppTheme.border),
+          // A real logo sits on white: many are transparent-background PNGs
+          // and a tinted tile behind them looks like a rendering fault.
+          color: hasLogo ? Colors.white : AppTheme.panel,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppTheme.strongBorder, width: 1.5),
         ),
         child: hasLogo
-            // contain, not cover — a non-square logo (wide wordmark, tall
-            // mark, etc.) must show in full, never cropped at the edges.
+            // contain, not cover - a non-square logo (wide wordmark, tall
+            // mark) must show in full, never cropped at the edges.
             ? Image.file(File(path), fit: BoxFit.contain, width: size, height: size)
-            : Text('tap to\nadd logo',
+            : const Text(
+                'Add\nlogo',
                 textAlign: TextAlign.center,
-                style: AppTheme.mono(fontSize: 8, color: AppTheme.subtleText)),
+                style: TextStyle(
+                  fontSize: 11,
+                  height: 1.3,
+                  fontWeight: FontWeight.w700,
+                  color: AppTheme.mutedText,
+                ),
+              ),
       ),
     );
   }

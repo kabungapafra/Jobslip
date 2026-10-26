@@ -100,7 +100,13 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     if (_controller.status != AnimationStatus.completed) return;
     if (!widget.ready) return;
     _finishScheduled = true;
-    widget.onFinished();
+    // The hand-off waits for the frame to end. _maybeFinish is reached from
+    // didUpdateWidget, which runs *during* the build phase — calling back
+    // synchronously there asks the app above us to rebuild while it is
+    // already building, which Flutter rejects outright.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) widget.onFinished();
+    });
   }
 
   @override
